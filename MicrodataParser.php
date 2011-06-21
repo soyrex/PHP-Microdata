@@ -121,7 +121,7 @@ class MicrodataParser
 			{
 				$car = $this->getItems($child);
 				if(count($car) > 0)
-					$item = array_merge($item,$car);
+					$item = array_merge_recursive($item,$car);
 			}
 		}
 			
