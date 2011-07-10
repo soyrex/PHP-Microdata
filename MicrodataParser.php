@@ -11,7 +11,6 @@
  * @author Alex Holt <alex@outsideinmedia.co.uk>
  * @copyright 2011
  */
- 
 /**
  * Class: MicrodataParser
  * Implements a simple parser to load the html for a URL and read out a 
@@ -19,12 +18,10 @@
  *
  * @package Microdata
  */
-class MicrodataParser
-{
+class MicrodataParser {
 	private $dataArray=false;
 	
-	public function __construct($url)
-	{
+	public function __construct($url) {
 		// Require the simple_html_dom.php library, this handles reading and
 		// accessing hte dom of the destination document
 		require_once('simplehtmldom/simple_html_dom.php');
@@ -44,8 +41,7 @@ class MicrodataParser
 	 *
 	 * @return array $microdataArray
 	 */ 
-	public function getArray()
-	{
+	public function getArray() {
 		return($this->dataArray);
 	}
 	/**
@@ -54,19 +50,16 @@ class MicrodataParser
 	 *
 	 * @return string $microdataJson
 	 */ 
-	public function getJson()
-	{
+	public function getJson() {
 		return(json_encode($this->dataArray));
 	}
-	
 	/**
 	 * prettyType()
 	 * Returns Microdata type as a simple string - nicer for matching.
 	 *
 	 * @return string $microdataType
 	 */ 
-	private function prettyType($type)
-	{
+	private function prettyType($type) {
 		return strtolower(preg_replace('|.*/|','',$type));
 	}
 	/**
@@ -75,10 +68,8 @@ class MicrodataParser
 	 *
 	 * @return string value
 	 */ 
-	private function getValue($elem)
-	{	
-		switch($elem->tag)
-		{
+	private function getValue($elem) {	
+		switch($elem->tag) {
 			case 'img':
 				return($elem->src);
 				break;
@@ -91,40 +82,30 @@ class MicrodataParser
 		}
 		return(strip_tags($elem->innertext));
 	}
-	
 	/**
 	 * getItems()
 	 * Recurse through the tree and find microdata.. the guts.
 	 *
 	 * @return array $microdataItems
 	 */ 
-	private function getItems($elem)
-	{
+	private function getItems($elem) {
 		$notitem = false;
 		$item = array();
-		if($elem->itemscope)
-		{
+		if($elem->itemscope) {
 			$item['_type'] = $elem->itemtype;
 			$item['_class'] =  $this->prettyType($elem->itemtype);			
-		}
-		else
-		{	
+		} else {	
 			$notitem = true;	
 		}
-		foreach($elem->children() as $child)
-		{
-			if($child->itemprop && !$child->itemscope)
-			{
+		foreach($elem->children() as $child) {
+			if($child->itemprop && !$child->itemscope) {
 				$item[$child->itemprop] = $this->getValue($child);
-			}
-			else
-			{
+			} else {
 				$car = $this->getItems($child);
 				if(count($car) > 0)
 					$item = array_merge_recursive($item,$car);
 			}
 		}
-			
 		if(count($item) > 1 && !$notitem)
 			$item = array($elem->itemprop=>$item);
 		
