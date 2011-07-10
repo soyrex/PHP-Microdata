@@ -9,7 +9,7 @@ Simple Example
 Instantiate the object and then return it to Json or a PHP
 array...
 
-  $md   = new MicrodataParser('http://example.url.here');
-  $json = $md->getJson(); // Return JSON
-  $arr  = $md->getArray(); // Return XML
+    $md   = new MicrodataParser('http://example.url.here');
+    $json = $md->getJson(); // Return JSON
+    $arr  = $md->getArray(); // Return XML
 
